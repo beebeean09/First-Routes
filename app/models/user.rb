@@ -3,17 +3,15 @@
 # Table name: users
 #
 #  id         :integer          not null, primary key
-#  name       :string           not null
-#  email      :string           not null
 #  created_at :datetime
 #  updated_at :datetime
+#  username   :string           not null
 #
 
 class User < ActiveRecord::Base
-  validates :name, :email, presence: true
+  validates :username, presence: true, uniqueness: true
 
-  # def initialize(options = {})
-  #   @name = options[:name]
-  #   @email = options[:email]
-  # end
+  has_many :contacts, class_name: :Contact, primary_key: :id, foreign_key: :user_id
+  has_many :share_contacts, through: :contacts, source: :shared_contacts
+  has_many :shared_contact, class_name: :ContactShare, primary_key: :id, foreign_key: :user_id
 end
